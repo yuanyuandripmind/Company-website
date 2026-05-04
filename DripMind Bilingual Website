@@ -1,362 +1,434 @@
-import React, { useState, useEffect } from 'react';
-import { Globe, Mail, MapPin, Users, Calendar, Award, ChevronRight, Menu, X, Rocket, Target, Heart, Lightbulb, Sparkles, Droplets, BookOpen } from 'lucide-react';
-
-const translations = {
-  en: {
-    nav: {
-      about: "About",
-      events: "Programs",
-      team: "Founders",
-      contact: "Contact",
-    },
-    hero: {
-      title: "Little by little makes a big difference.",
-      subtitle: "Empowering young visionaries (ages 8-18) through real-world investment and entrepreneurship education.",
-      cta: "Explore Our Programs",
-    },
-    about: {
-      title: "About DripMind",
-      description: "DripMind's vision is to build an innovative education platform firmly grounded in real-world scenarios and hands-on learning. Tailored for teenagers aged 8-18, we bridge the gap between classroom theory and the pulse of the business world. Beyond traditional courses, we connect students with an extensive ecosystem of industry leaders—from consumer brands to tech-savvy internet giants and green energy pioneers. These founders and key decision-makers serve as mentors, opening their doors for students to observe real business logic and sharing the hard-earned wisdom behind their toughest choices. Through this immersive approach, students dive into genuine investment philosophies and entrepreneurial strategies, helping them build a deeper grasp of human nature, value creation, and social dynamics. Our mission is to guide young dreamers in discovering their unique sense of purpose, helping them find their own 'coordinates' in the ocean of the future.",
-      philosophy: "Our core belief is 'Water wears away the stone.' Fresh ways of thinking and entrepreneurial mindsets take time and steady effort to develop through ongoing practice and reflection.",
-    },
-    events: {
-      title: "Upcoming Programs",
-      campTitle: "Beijing Summer Camp 2026",
-      campDesc: "A premium immersive experience where students tackle real-world business challenges in the heart of China's innovation hub.",
-      workshopTitle: "Workshop of Questioning",
-      workshopDesc: "Master the art of critical thinking and effective inquiry to unlock deeper insights into market logic.",
-      learnMore: "Learn More",
-    },
-    team: {
-      title: "Our Founders",
-      jiTitle: "Ji Yuanyuan - Founder",
-      jiBio: "Founder Ji Yuanyuan brings more than a decade of elite investment experience, having sharpened her skills at top global asset managers after her economics and finance studies at the University of Hong Kong. Throughout her professional journey, she has travelled far and wide, averaging visits to over a hundred companies and their founders annually. Through these in-depth, one-on-one conversations, she has seen firsthand the profound impact that great leaders have on society. As a mother of two, she founded DripMind to pass on the 'entrepreneurial spirit'—the courage to create and lead—to young dreamers, emphasizing the value of 'unity of knowledge and action.'",
-      guTitle: "Gu Silun - Co-Founder",
-      guBio: "Co-Founder Gu Silun is a 'cross-disciplinary all-rounder' who transitioned from global asset management to high-impact roles at Li Auto, spanning strategic investment, overseas business, and frontline operations. Having navigated the pressures of standardized excellence in her youth, she is dedicated to a model where education is about the application of knowledge. She believes growth is a lifelong journey of 'exploring outward and reflecting inward.' By linking students with industry leaders, she aims to ignite the life force and real-world grit of the next generation.",
-    },
-    partners: {
-      title: "Our Ecosystem",
-      desc: "We partner with innovative consumer brands, tech giants, and green energy leaders. Founders and decision-makers serve as mentors, sharing real-world insights.",
-    },
-    contact: {
-      title: "Connect With Us",
-      name: "Full Name",
-      email: "Email Address",
-      message: "Your Message",
-      send: "Send Message",
-      success: "Thank you! We will get back to you soon.",
-    },
-    footer: "© 2025 DripMind (水滴智行). All rights reserved."
-  },
-  zh: {
-    nav: {
-      about: "关于我们",
-      events: "近期项目",
-      team: "创始团队",
-      contact: "联系我们",
-    },
-    hero: {
-      title: "积微成著, 水滴石穿",
-      subtitle: "为8-18岁青少年打造扎根生活、注重实践的投资创业创新教育平台。",
-      cta: "探索课程",
-    },
-    about: {
-      title: "关于水滴智行",
-      description: "水滴智行的愿景是打造一个扎根在生活里、注重实践的创新教育平台，专门为8-18岁的青少年提供投资创业相关的课程和支持。我们致力于缩小课堂与真实商业世界之间的距离，链接涵盖消费品牌、互联网巨头、智能制造及绿色能源等各行业的合作伙伴生态。在这里，企业的创始人和决策者不仅是导师，更通过开放企业考察和亲身经验分享，让孩子们真正理解资源配置与决策背后的思考点与难点。通过不断思考和实践，孩子们慢慢积累对人性、价值与社会的认知，在真实的商业脉搏中探索，引导他们在成长路上主动找到属于自己的人生坐标与价值方向，为未来积蓄水滴石穿的力量。",
-      philosophy: "我们深信创新的思维方式、成熟的投资理念以及坚韧的企业家精神，都需要在长年累月的真实锻炼与持续反思中沉淀。",
-    },
-    events: {
-      title: "近期课程项目",
-      campTitle: "2026 北京夏季实战营",
-      campDesc: "沉浸式商业实战体验, 在中国创新之都的心脏地带迎接真实的商业挑战。",
-      workshopTitle: "批判性提问工作坊",
-      workshopDesc: "掌握深度思考与有效提问的艺术, 开启洞察市场逻辑的关键钥匙。",
-      learnMore: "查看详情",
-    },
-    team: {
-      title: "创始团队",
-      jiTitle: "季苑苑 - 创始人",
-      jiBio: "创始人季苑苑拥有十余年全球顶级基金实战历练及香港大学经济金融背景。多年间她足迹遍布全球, 每年深度调研上百家企业与创始人, 通过面对面的交流，真切感受到卓越企业家与管理者对社会和个人产生的深远影响。作为两个孩子的母亲，她深知“知行合一”的成长何其珍贵。她不想只给孩子讲书本上的道理，创办水滴智行是她作为教育者的初心，旨在将真实世界里的“企业家精神”——那种敢于创造、引领未来的气魄，亲手传递给下一代。",
-      guTitle: "顾思伦 - 联合创始人",
-      guBio: "联合创始人顾思伦，从全球顶级资管公司的金融精英，到理想汽车横跨战投、海外与一线门店的“全能跨界者”，她的每一步都在打破边界。她主张成长是“向外认知、向内探求”的终身课题，认为教育不应是标准化的工业品，而应是对知识应用的极致追求。她致力于链接各行业卓越导师，将实干精神和正能量传递给少年，鼓励他们在最勇敢的年纪去试错、去感受，点亮他们创造未来的生命力。",
-    },
-    partners: {
-      title: "合作伙伴生态",
-      desc: "我们的合作伙伴遍布消费品牌、科技巨头及绿色能源企业。企业创始人们亲自担任导师，分享资源配置背后的思考。",
-    },
-    contact: {
-      title: "联系我们",
-      name: "您的姓名",
-      email: "电子邮箱",
-      message: "您的留言",
-      send: "提交信息",
-      success: "感谢您的关注！我们会尽快联系您。",
-    },
-    footer: "© 2025 水滴智行 DripMind. 保留所有权利。"
-  }
-};
-
-const App = () => {
-  const [lang, setLang] = useState('zh');
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  const t = translations[lang];
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const toggleLang = () => setLang(lang === 'en' ? 'zh' : 'en');
-
-  const SectionTitle = ({ children, light = false }) => (
-    <div className="mb-12 text-center md:text-left">
-      <h2 className={`text-3xl md:text-5xl font-black mb-4 tracking-tight ${light ? 'text-white' : 'text-slate-900'}`}>
-        {children}
-      </h2>
-      <div className="w-16 h-1.5 bg-gradient-to-r from-sky-400 to-purple-500 rounded-full"></div>
-    </div>
-  );
-
-  const FluidShape = ({ className }) => (
-    <div className={`absolute pointer-events-none ${className}`}>
-      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full opacity-20">
-        <path fill="currentColor" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.6,-31.3,86.9,-15.7,85.5,-0.8C84.1,14.1,78,28.2,69.5,40.4C61,52.6,50.1,62.9,37.6,70.5C25.1,78.1,11,83,1.9,79.7C-7.2,76.4,-14.4,64.9,-25.1,57.1C35.8,49.3,-50,45.2,-60.7,37.3C-71.4,29.4,-78.6,17.7,-81.1,5.1C-83.6,-7.5,-81.4,-21,-74.6,-32.8C-67.8,-44.6,-56.4,-54.7,-43.8,-62.1C-31.2,-69.5,-17.4,-74.2,-1.9,-70.9C13.6,-67.6,27.2,-56.3,44.7,-76.4Z" transform="translate(100 100)" />
-      </svg>
-    </div>
-  );
-
-  return (
-    <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-purple-100 selection:text-purple-900 overflow-x-hidden">
-      {/* Navbar */}
-      <nav className={`fixed w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-white/80 backdrop-blur-xl border-b border-slate-100 py-4 shadow-sm' : 'bg-transparent py-8'}`}>
-        <div className="max-w-7xl mx-auto px-8 flex justify-between items-center">
-          <div className="flex items-center space-x-3 cursor-pointer">
-            <div className="w-10 h-10 bg-gradient-to-br from-sky-400 to-purple-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg">
-              DM
-            </div>
-            <span className={`text-xl font-black tracking-tight text-slate-900`}>DripMind</span>
-          </div>
-
-          <div className="hidden md:flex items-center space-x-12">
-            {['about', 'events', 'team', 'contact'].map((item) => (
-              <a key={item} href={`#${item}`} className={`text-xs font-bold uppercase tracking-widest transition-colors hover:text-purple-500 text-slate-600`}>
-                {t.nav[item]}
-              </a>
-            ))}
-            <button onClick={toggleLang} className={`flex items-center gap-2 px-4 py-2 rounded-lg border font-bold text-[10px] tracking-widest transition-all border-slate-200 text-slate-600 hover:bg-slate-50`}>
-              <Globe size={14} /> {lang === 'en' ? '中文' : 'ENGLISH'}
-            </button>
-          </div>
-
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2 text-slate-900">
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section className="relative h-[90vh] flex items-center justify-center bg-white overflow-hidden">
-        <div className="absolute inset-0 z-0">
-           <div className="absolute top-[-20%] right-[-10%] w-[70%] h-[70%] bg-purple-100/60 blur-[120px] rounded-full animate-pulse" />
-           <div className="absolute bottom-[-20%] left-[-10%] w-[70%] h-[70%] bg-sky-100/60 blur-[120px] rounded-full animate-pulse delay-1000" />
-           <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M54 48c-2.209 0-4 1.791-4 4s1.791 4 4 4 4-1.791 4-4-1.791-4-4-4zM6 4c-2.209 0-4 1.791-4 4s1.791 4 4 4 4-1.791 4-4-1.791-4-4-4zM6 48c-2.209 0-4 1.791-4 4s1.791 4 4 4 4-1.791 4-4-1.791-4-4-4zM54 4c-2.209 0-4 1.791-4 4s1.791 4 4 4 4-1.791 4-4-1.791-4-4-4z\' fill=\'%23000000\' fill-opacity=\'1\' fill-rule=\'evenodd\'/%3E%3C/svg%3E")' }} />
-        </div>
-
-        <div className="relative z-10 max-w-5xl mx-auto px-8 text-center">
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-50 border border-slate-100 text-purple-600 text-[10px] font-black uppercase tracking-[0.4em] mb-10 animate-fade-in">
-             <Droplets size={14} /> Reshaping Future Education
-          </div>
-          <h1 className="text-5xl md:text-8xl font-black text-slate-900 mb-10 tracking-tighter leading-[0.9] animate-in slide-in-from-bottom-10 duration-700">
-            {t.hero.title}
-          </h1>
-          <p className="text-lg md:text-2xl text-slate-500 max-w-2xl mx-auto mb-14 font-medium leading-relaxed">
-            {t.hero.subtitle}
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-6">
-            <a href="#events" className="px-10 py-5 bg-gradient-to-r from-sky-400 to-purple-600 text-white rounded-2xl font-bold text-lg hover:scale-105 active:scale-95 transition-all shadow-xl shadow-purple-500/20">
-              {t.hero.cta}
-            </a>
-            <a href="#about" className="px-10 py-5 bg-white border border-slate-200 text-slate-600 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all">
-              {t.nav.about}
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-32 px-8 max-w-7xl mx-auto relative">
-        <FluidShape className="text-purple-50 -top-20 -left-40 w-[600px] h-[600px]" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DripMind | 水滴智行 - 創新青少年教育平台</title>
+    <!-- 樣式庫：Tailwind CSS 與 FontAwesome 圖標 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366F1', // Indigo 500
+                        secondary: '#F5F3FF', // Violet 50
+                        accent: '#A855F7', // Purple 500
+                        dark: '#1E1B4B' // Deep Indigo
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'PingFang TC', 'Microsoft JhengHei', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .section-padding { @apply py-24 px-6 md:px-16 lg:px-32; }
+            .card-shadow { @apply shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2; }
+            .nav-link { @apply text-dark hover:text-primary font-medium transition-colors cursor-pointer; }
+        }
+        /* 語言顯示控制 */
+        [data-lang-en], [data-lang-cn] { display: none; }
+        .lang-en [data-lang-en] { display: block; }
+        .lang-en span[data-lang-en], .lang-en i[data-lang-en] { display: inline; }
+        .lang-cn [data-lang-cn] { display: block; }
+        .lang-cn span[data-lang-cn], .lang-cn i[data-lang-cn] { display: inline; }
         
-        <div className="grid md:grid-cols-2 gap-24 items-center">
-          <div className="relative order-2 md:order-1">
-             <div className="aspect-square bg-gradient-to-br from-sky-50 to-purple-50 rounded-[60px] flex items-center justify-center p-12 border border-slate-100 shadow-sm">
-                <div className="relative w-full h-full flex items-center justify-center">
-                  <div className="absolute w-3/4 h-3/4 bg-sky-400/10 rounded-full animate-ping duration-[4000ms]" />
-                  <div className="absolute w-1/2 h-1/2 bg-purple-500/10 rounded-full animate-ping duration-[3000ms]" />
-                  <Droplets size={120} className="text-purple-500 relative z-10" strokeWidth={1} />
+        html { scroll-behavior: smooth; }
+        /* 藍紫色漸層背景 */
+        .hero-gradient { 
+            background: linear-gradient(135deg, #1E1B4B 0%, #4338CA 50%, #6D28D9 100%); 
+        }
+    </style>
+</head>
+<!-- 預設顯示英文版 -->
+<body class="lang-en font-sans text-dark bg-white overflow-x-hidden">
+
+    <!-- 導覽欄 -->
+    <header class="fixed w-full bg-white/80 backdrop-blur-lg z-50 border-b border-indigo-100">
+        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#home" class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg">DM</div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg leading-none tracking-tight">DripMind</span>
+                    <span class="text-xs text-indigo-400 font-medium tracking-widest">水滴智行</span>
                 </div>
-             </div>
-             <div className="absolute -bottom-6 -right-6 bg-white p-8 rounded-3xl shadow-xl border border-slate-100 max-w-[240px]">
-                <Sparkles size={24} className="text-sky-500 mb-3" />
-                <p className="text-sm font-bold text-slate-800 italic leading-snug">
-                  {lang === 'en' ? '"Water wears away the stone."' : '"积微成著, 水滴石穿"'}
+            </a>
+
+            <!-- 桌面菜單 -->
+            <nav class="hidden lg:flex items-center gap-10">
+                <a href="#home" class="nav-link"><span data-lang-en>Home</span><span data-lang-cn>首頁</span></a>
+                <a href="#philosophy" class="nav-link"><span data-lang-en>Philosophy</span><span data-lang-cn>教學理念</span></a>
+                <a href="#about" class="nav-link"><span data-lang-en>About</span><span data-lang-cn>關於我們</span></a>
+                <a href="#events" class="nav-link"><span data-lang-en>Events</span><span data-lang-cn>近期活動</span></a>
+                <a href="#contact" class="nav-link"><span data-lang-en>Contact</span><span data-lang-cn>聯繫我們</span></a>
+                
+                <button id="langToggle" class="flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-200 text-indigo-600 hover:bg-indigo-50 transition-all text-sm font-semibold">
+                    <i class="fa fa-globe"></i>
+                    <span data-lang-en>中文</span><span data-lang-cn>English</span>
+                </button>
+            </nav>
+
+            <!-- 移動端觸發按鈕 -->
+            <button id="mobileMenuBtn" class="lg:hidden p-2 text-dark">
+                <i class="fa fa-bars text-2xl text-indigo-900"></i>
+            </button>
+        </div>
+
+        <!-- 移動端菜單面板 -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-white w-full border-t border-indigo-50 px-6 py-8 flex flex-col gap-6 shadow-2xl">
+            <a href="#home" class="text-xl font-semibold"><span data-lang-en>Home</span><span data-lang-cn>首頁</span></a>
+            <a href="#philosophy" class="text-xl font-semibold"><span data-lang-en>Philosophy</span><span data-lang-cn>教學理念</span></a>
+            <a href="#about" class="text-xl font-semibold"><span data-lang-en>About</span><span data-lang-cn>關於我們</span></a>
+            <a href="#events" class="text-xl font-semibold"><span data-lang-en>Events</span><span data-lang-cn>近期活動</span></a>
+            <a href="#contact" class="text-xl font-semibold"><span data-lang-en>Contact</span><span data-lang-cn>聯繫我們</span></a>
+            <button id="mobileLangToggle" class="w-full py-4 bg-indigo-50 rounded-xl font-bold text-primary">
+                <span data-lang-en>切換至 中文</span><span data-lang-cn>Switch to English</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero 視覺區 -->
+    <section id="home" class="hero-gradient min-h-screen flex items-center pt-20 text-white">
+        <div class="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+            <div class="space-y-10 animate-fade-in relative z-10">
+                <!-- Prioritized Quote -->
+                <div class="border-l-4 border-indigo-400 pl-6 py-2">
+                    <p class="text-2xl md:text-3xl font-medium italic text-indigo-100 tracking-wide leading-relaxed">
+                        <span data-lang-en>"Little by little makes a big difference; water wears away the stone."</span>
+                        <span data-lang-cn>「積微成著，水滴石穿」</span>
+                    </p>
+                </div>
+
+                <h1 class="text-5xl lg:text-7xl font-extrabold leading-tight">
+                    <span data-lang-en>Empowering<br><span class="text-indigo-200">Young Minds</span></span>
+                    <span data-lang-cn>賦能青少年認知躍遷</span>
+                </h1>
+                
+                <p class="text-xl text-indigo-100/80 max-w-xl leading-relaxed">
+                    <span data-lang-en>Bridging life and practice through innovative entrepreneurship and investment education. We don't just teach business; we nurture wisdom.</span>
+                    <span data-lang-cn>根植生活的創新教育，通過真實的投資與創業實踐，培養孩子對價值的洞察與對社會的深度認知。</span>
                 </p>
-             </div>
-          </div>
-
-          <div className="order-1 md:order-2">
-            <div className="text-sky-500 font-black tracking-[0.3em] uppercase text-xs mb-4">OUR PHILOSOPHY</div>
-            <SectionTitle>{t.about.title}</SectionTitle>
-            <div className="space-y-8 text-slate-600">
-              <p className="text-xl font-medium leading-relaxed">{t.about.description}</p>
-              <p className="text-lg leading-relaxed">{t.about.philosophy}</p>
-            </div>
-            
-            <div className="flex gap-12 mt-16">
-              <div>
-                <div className="text-4xl font-black text-slate-900 mb-1">8-18</div>
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Ages Focused</div>
-              </div>
-              <div className="w-px h-12 bg-slate-100" />
-              <div>
-                <div className="text-4xl font-black text-slate-900 mb-1">24/7</div>
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Supportive Ecosystem</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Programs Section */}
-      <section id="events" className="py-32 bg-slate-50 px-8 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <SectionTitle>{t.events.title}</SectionTitle>
-          
-          <div className="grid md:grid-cols-2 gap-10 mt-16">
-            <div className="group bg-white rounded-[48px] p-12 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col h-full relative overflow-hidden border border-white">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-sky-50 rounded-full blur-3xl -mr-32 -mt-32" />
-              <div className="w-16 h-16 bg-sky-500 rounded-2xl flex items-center justify-center text-white mb-10 shadow-lg group-hover:rotate-6 transition-transform">
-                <MapPin size={32} />
-              </div>
-              <h3 className="text-3xl font-black text-slate-900 mb-6">{t.events.campTitle}</h3>
-              <p className="text-slate-500 text-lg leading-relaxed mb-10 flex-grow">{t.events.campDesc}</p>
-              <a href="https://yuanyuandripmind.github.io/Beijing-Summer-Camp-2026/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 font-black text-sky-500 uppercase tracking-widest text-xs group-hover:translate-x-2 transition-transform">
-                {t.events.learnMore} <ChevronRight size={16} />
-              </a>
-            </div>
-
-            <div className="group bg-white rounded-[48px] p-12 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col h-full relative overflow-hidden border border-white">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-purple-50 rounded-full blur-3xl -mr-32 -mt-32" />
-              <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center text-white mb-10 shadow-lg group-hover:rotate-6 transition-transform">
-                <BookOpen size={32} />
-              </div>
-              <h3 className="text-3xl font-black text-slate-900 mb-6">{t.events.workshopTitle}</h3>
-              <p className="text-slate-500 text-lg leading-relaxed mb-10 flex-grow">{t.events.workshopDesc}</p>
-              <a href="https://yuanyuandripmind.github.io/Workshop-of-Questioning/" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 font-black text-purple-600 uppercase tracking-widest text-xs group-hover:translate-x-2 transition-transform">
-                {t.events.learnMore} <ChevronRight size={16} />
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Founders Section */}
-      <section id="team" className="py-32 px-8 max-w-7xl mx-auto">
-        <SectionTitle>{t.team.title}</SectionTitle>
-        <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-16 mt-16">
-          {[
-            { name: t.team.jiTitle, bio: t.team.jiBio, icon: Award, color: "text-sky-500", bg: "bg-sky-50" },
-            { name: t.team.guTitle, bio: t.team.guBio, icon: Users, color: "text-purple-600", bg: "bg-purple-50" }
-          ].map((founder, i) => (
-            <div key={i} className="flex flex-col md:flex-row gap-10 items-start p-6 rounded-[32px] hover:bg-slate-50 transition-colors">
-               <div className={`w-24 h-24 shrink-0 rounded-3xl ${founder.bg} flex items-center justify-center ${founder.color} shadow-sm`}>
-                  <founder.icon size={40} />
-               </div>
-               <div>
-                  <h4 className="text-2xl font-black text-slate-900 mb-4 tracking-tight">{founder.name}</h4>
-                  <p className="text-slate-500 leading-relaxed font-medium text-sm md:text-base">{founder.bio}</p>
-               </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-32 px-8 bg-white relative overflow-hidden border-t border-slate-100">
-        <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(#000000 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-50 rounded-full blur-[100px] -mr-40 -mt-40" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-sky-50 rounded-full blur-[100px] -ml-40 -mb-40" />
-
-        <div className="max-w-7xl mx-auto relative z-10 grid md:grid-cols-2 gap-24">
-          <div>
-            <div className="text-sky-500 font-black tracking-[0.3em] uppercase text-xs mb-4">GET IN TOUCH</div>
-            <h2 className="text-4xl md:text-6xl font-black mb-12 tracking-tight leading-none text-slate-900">{t.contact.title}</h2>
-            
-            <div className="space-y-12">
-              <div className="flex gap-8">
-                <div className="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-500 shadow-sm">
-                  <Mail size={32} strokeWidth={1.5} />
+                
+                <div class="flex flex-col sm:flex-row gap-5 pt-4">
+                    <a href="#events" class="px-10 py-4 bg-white text-indigo-900 rounded-xl font-bold text-center hover:bg-indigo-50 transition-all transform hover:-translate-y-1 shadow-2xl">
+                        <span data-lang-en>View Programs</span><span data-lang-cn>查看課程</span>
+                    </a>
+                    <a href="#about" class="px-10 py-4 border-2 border-white/30 text-white rounded-xl font-bold text-center hover:bg-white/10 transition-all">
+                        <span data-lang-en>Meet the Team</span><span data-lang-cn>了解團隊</span>
+                    </a>
                 </div>
+            </div>
+            
+            <!-- 可視化 Logo 區域 -->
+            <div class="hidden lg:flex justify-center items-center relative">
+                <div class="relative w-80 h-80 flex items-center justify-center">
+                    <!-- 背景裝飾圈 -->
+                    <div class="absolute inset-0 bg-indigo-400/20 rounded-full animate-pulse blur-3xl"></div>
+                    <div class="absolute inset-[-20%] border border-white/10 rounded-full animate-[spin_20s_linear_infinite]"></div>
+                    <div class="absolute inset-[-40%] border border-white/5 rounded-full animate-[spin_30s_linear_infinite_reverse]"></div>
+                    
+                    <!-- 核心大 Logo -->
+                    <div class="relative z-20 w-64 h-64 bg-gradient-to-br from-white to-indigo-100 rounded-[3rem] shadow-2xl flex flex-col items-center justify-center p-8 transform rotate-3 hover:rotate-0 transition-transform duration-700">
+                        <span class="text-indigo-600 font-black text-8xl mb-2">DM</span>
+                        <div class="h-1.5 w-12 bg-indigo-600 rounded-full"></div>
+                        <p class="mt-4 text-indigo-900 font-bold tracking-widest text-center text-sm">DRIPMIND<br>水滴智行</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 教學理念 -->
+    <section id="philosophy" class="section-padding bg-slate-50">
+        <div class="container mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4 text-indigo-950">
+                    <span data-lang-en>Why DripMind?</span>
+                    <span data-lang-cn>為什麼選擇水滴智行？</span>
+                </h2>
+                <div class="w-20 h-1.5 bg-primary mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="p-12 rounded-[2.5rem] bg-white card-shadow border border-indigo-50">
+                    <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-3xl mb-8">
+                        <i class="fa fa-compass"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4" data-lang-en>Real Scenarios</h3>
+                    <h3 class="text-2xl font-bold mb-4" data-lang-cn>真實場景導向</h3>
+                    <p class="text-slate-500 text-lg leading-relaxed" data-lang-en>Learning is rooted in real-life business environments, not just textbooks.</p>
+                    <p class="text-slate-500 text-lg leading-relaxed" data-lang-cn>教育不應脫離生活，我們帶孩子進入真實的商業環境，在實務中學習與反思。</p>
+                </div>
+                <div class="p-12 rounded-[2.5rem] bg-white card-shadow border border-indigo-50">
+                    <div class="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center text-white text-3xl mb-8">
+                        <i class="fa fa-users"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4" data-lang-en>Human Insights</h3>
+                    <h3 class="text-2xl font-bold mb-4" data-lang-cn>人性與價值洞察</h3>
+                    <p class="text-slate-500 text-lg leading-relaxed" data-lang-en>Develop deep understanding of human nature and societal value through practice.</p>
+                    <p class="text-slate-500 text-lg leading-relaxed" data-lang-cn>理解財富背後的底層邏輯，積澱對人性、價值和社會運行規律的深度理解。</p>
+                </div>
+                <div class="p-12 rounded-[2.5rem] bg-white card-shadow border border-indigo-50">
+                    <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-3xl mb-8">
+                        <i class="fa fa-shield"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4" data-lang-en>Resilient Mindset</h3>
+                    <h3 class="text-2xl font-bold mb-4" data-lang-cn>企業家精神</h3>
+                    <p class="text-slate-500 text-lg leading-relaxed" data-lang-en>Cultivating resilience and a mature investment philosophy for lifelong growth.</p>
+                    <p class="text-slate-500 text-lg leading-relaxed" data-lang-cn>培育面對不確定性的韌性，樹立長期主義的投資觀與具備責任感的擔當精神。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 關於我們 & 團隊 -->
+    <section id="about" class="section-padding bg-white relative overflow-hidden">
+        <div class="container mx-auto">
+            <div class="max-w-4xl mx-auto text-center mb-24">
+                <h2 class="text-3xl md:text-5xl font-bold mb-8 text-indigo-950" data-lang-en>Founding Mentors</h2>
+                <h2 class="text-3xl md:text-5xl font-bold mb-8 text-indigo-950" data-lang-cn>創始導師團隊</h2>
+                <p class="text-xl text-slate-500 leading-relaxed">
+                    <span data-lang-en>Led by veterans from top global asset management and strategic investment backgrounds, we bring elite real-world expertise to teenage education.</span>
+                    <span data-lang-cn>我們的導師團隊由來自全球頂級資產管理公司和知名企業的專家組成，致力於將一線實戰智慧轉化為青少年的成長動力。</span>
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
+                <!-- 季苑苑 -->
+                <div class="bg-indigo-50 rounded-[3rem] p-10 md:p-14 card-shadow border border-indigo-100 h-full flex flex-col">
+                    <div class="mb-8">
+                        <h3 class="text-3xl font-black text-indigo-950 mb-2">Ji Yuanyuan</h3>
+                        <h4 class="text-primary font-bold mb-2 text-xl" data-lang-cn>創始人：季苑苑</h4>
+                        <div class="text-sm font-bold text-indigo-400 uppercase tracking-wider mb-6">
+                            <span data-lang-en>Ex-Global Top Asset Management Portfolio Manager</span>
+                            <span data-lang-cn>前全球頂級資產管理公司投資經理</span>
+                        </div>
+                    </div>
+                    <div class="text-indigo-900/80 leading-relaxed space-y-4 text-lg">
+                        <p data-lang-en>Founder Ji Yuanyuan brings more than a decade of impressive experience from her career in investing. Her time studying economics and finance at the University of Hong Kong gave her a rock-solid foundation, while managing portfolios at top global asset managers sharpened her investment skills through real-world challenges.</p>
+                        <p data-lang-en>Over those years, she's travelled far and wide, averaging visits to over a hundred companies and their founders annually. Through those in-depth, one-on-one conversations, she's seen firsthand the huge impact that great entrepreneurs and leaders have on people and society. As a mom of two, she's come to truly value the power of ongoing learning and practice in her own journey—and she's eager to pass on those lessons to others. That's how DripMind came to life: she wants to share the entrepreneurial spirit she's embraced with young dreamers.</p>
+                        
+                        <p data-lang-cn>創始人季苑苑擁有十餘年資深的投資實務經驗。她在香港大學經濟金融專業的學習為其打下了堅實的理論基礎，而在全球頂級資產管理公司擔任投資經理的歷練，更讓她在真實世界的挑戰中磨礪出敏銳的投資眼光。</p>
+                        <p data-lang-cn>多年來，她足跡遍布各地，年均走訪上百家企業及其創始人。透過深度的一對一交流，她親身見證了卓越企業家與領導者對個人及社會產生的巨大影響力。作為兩個孩子的母親，她在自己的成長歷程中深刻體會到持續學習與實踐的力量，並渴望將這些寶貴經驗傳承下去。這正是水滴智行（DripMind）誕生的初衷：她希望與年輕的夢想家們分享她所尊崇的企業家精神。</p>
+                    </div>
+                </div>
+
+                <!-- 顧思倫 -->
+                <div class="bg-purple-50 rounded-[3rem] p-10 md:p-14 card-shadow border border-purple-100 h-full flex flex-col">
+                    <div class="mb-8">
+                        <h3 class="text-3xl font-black text-purple-950 mb-2">Gu Silun</h3>
+                        <h4 class="text-accent font-bold mb-2 text-xl" data-lang-cn>聯合創始人：顧思倫</h4>
+                        <div class="text-sm font-bold text-purple-400 uppercase tracking-wider mb-6">
+                            <span data-lang-en>Cross-industry strategy specialist</span>
+                            <span data-lang-cn>橫跨戰投、零售與海外業務專家</span>
+                        </div>
+                    </div>
+                    <div class="text-purple-900/80 leading-relaxed space-y-4 text-lg">
+                        <p data-lang-en>Co-founder Gu Silun has consistently pushed beyond conventional boundaries—from a finance professional at global asset management firms to a highly versatile leader at Li Auto across strategic investments, overseas business, and frontline retail operations.</p>
+                        <p data-lang-en>Inspired by seeing students abroad shine in the fields they love, she came to believe education should not be a standardized product but a lifelong journey of understanding the world outwardly and exploring the self inwardly, which led her to co-found DripMind to help children shorten the trial-and-error path, encouraging them to experiment boldly, and to connect outstanding entrepreneurs across industries so the real-world spirit of execution and positive energy can be passed on to the next generation.</p>
+                        
+                        <p data-lang-cn>聯合創始人顧思倫始終致力於打破傳統邊界——從全球資產管理公司的金融精英，到理想汽車橫跨戰略投資、海外業務與一線零售運營的跨界領導者。</p>
+                        <p data-lang-cn>受到海外學子在熱愛領域發光發熱的啟發，她深信教育不應是標準化的產品，而是一場向外認知世界、向內探索自我的終身旅程。這促使她共同創立了水滴智行，旨在幫助孩子們縮短摸索的路徑，鼓勵他們大膽嘗試，並連結各行業優秀的企業家，將真實世界的執行力與正能量傳遞給下一代。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 近期活動 -->
+    <section id="events" class="section-padding bg-slate-50">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
                 <div>
-                  <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-2">Email Address</p>
-                  <p className="text-2xl font-bold text-slate-800">yuanyuan.ji@dripmindhk.com</p>
+                    <h2 class="text-3xl md:text-6xl font-bold mb-6 text-indigo-950">
+                        <span data-lang-en>Upcoming Programs</span>
+                        <span data-lang-cn>近期探索計劃</span>
+                    </h2>
+                    <p class="text-indigo-400 font-bold text-lg" data-lang-en>Join our upcoming cohorts for a transformative experience.</p>
+                    <p class="text-indigo-400 font-bold text-lg" data-lang-cn>加入我們，開啟一場關於智慧與視野的變革之旅。</p>
                 </div>
-              </div>
             </div>
-          </div>
 
-          <div className="bg-slate-50 border border-slate-100 p-12 rounded-[48px] shadow-sm">
-             {submitted ? (
-               <div className="py-16 text-center animate-in zoom-in-95">
-                 <div className="w-20 h-20 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center mx-auto mb-8">
-                   <Target size={40} />
-                 </div>
-                 <h3 className="text-3xl font-black mb-4 text-slate-900">{t.contact.success}</h3>
-                 <button onClick={() => setSubmitted(false)} className="text-sky-600 font-bold hover:underline">SEND ANOTHER MESSAGE</button>
-               </div>
-             ) : (
-               <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} className="space-y-8">
-                  <div className="grid grid-cols-2 gap-8">
-                    <div className="border-b border-slate-200 focus-within:border-sky-400 transition-colors py-2">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{t.contact.name}</label>
-                      <input required type="text" className="w-full bg-transparent text-slate-900 font-bold py-2 focus:outline-none" />
+            <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+                <!-- 活動卡片 1 (Beijing Summer Camp) -->
+                <div class="group bg-white p-8 rounded-[3rem] card-shadow border border-indigo-50">
+                    <div class="relative aspect-video rounded-[2rem] overflow-hidden mb-8 shadow-inner">
+                        <!-- EV Photo Placeholder -->
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&q=80&w=800');"></div>
+                        <!-- Theme Colored Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-indigo-900/80 to-indigo-600/40 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-60"></div>
+                        <!-- Floating Label -->
+                        <div class="absolute top-8 left-8 bg-white/20 backdrop-blur-md px-5 py-2 rounded-full text-sm font-bold text-white z-20 shadow-lg border border-white/10">
+                            <span data-lang-en>Beijing Summer Camp</span><span data-lang-cn>北京夏令營</span>
+                        </div>
+                        <!-- Decorative Icon Overlay -->
+                        <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                            <i class="fa fa-car text-9xl text-white"></i>
+                        </div>
                     </div>
-                    <div className="border-b border-slate-200 focus-within:border-sky-400 transition-colors py-2">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{t.contact.email}</label>
-                      <input required type="email" className="w-full bg-transparent text-slate-900 font-bold py-2 focus:outline-none" />
+                    <h3 class="text-3xl font-extrabold mb-4 group-hover:text-primary transition-colors text-indigo-950">
+                        <span data-lang-en>2026 Junior Investment Camp</span>
+                        <span data-lang-cn>2026 北京青少年投資夏令營</span>
+                    </h3>
+                    <div class="flex flex-wrap gap-5 text-indigo-400 font-bold mb-8">
+                        <span class="flex items-center"><i class="fa fa-calendar-o mr-2"></i> 2026年7月</span>
+                        <span class="flex items-center"><i class="fa fa-map-marker mr-2"></i> 北京</span>
+                        <span class="flex items-center"><i class="fa fa-users mr-2"></i> 12-15歲</span>
                     </div>
-                  </div>
-                  <div className="border-b border-slate-200 focus-within:border-sky-400 transition-colors py-2">
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{t.contact.message}</label>
-                    <textarea required rows="4" className="w-full bg-transparent text-slate-900 font-bold py-2 focus:outline-none resize-none"></textarea>
-                  </div>
-                  <button type="submit" className="w-full py-6 bg-slate-900 text-white rounded-2xl font-black tracking-widest uppercase text-sm hover:bg-purple-600 transition-all shadow-xl shadow-slate-900/10 active:scale-[0.98]">
-                    {t.contact.send}
-                  </button>
-               </form>
-             )}
-          </div>
+                    <a href="https://yuanyuandripmind.github.io/Beijing-Summer-Camp-2026/" target="_blank" class="w-full py-4 rounded-2xl bg-indigo-50 text-indigo-600 font-black flex items-center justify-center gap-3 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-sm">
+                        <span data-lang-en>Explore Details</span><span data-lang-cn>探索詳情</span>
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+
+                <!-- 活動卡片 2 (The Art of Questioning) -->
+                <div class="group bg-white p-8 rounded-[3rem] card-shadow border border-purple-50">
+                    <div class="relative aspect-video rounded-[2rem] overflow-hidden mb-8 shadow-inner">
+                        <!-- Journalism Photo Placeholder -->
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image: url('https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&q=80&w=800');"></div>
+                        <!-- Theme Colored Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-900/80 to-purple-600/40 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-60"></div>
+                        <!-- Floating Label -->
+                        <div class="absolute top-8 left-8 bg-white/20 backdrop-blur-md px-5 py-2 rounded-full text-sm font-bold text-white z-20 shadow-lg border border-white/10">
+                            <span data-lang-en>Bilingual Workshop</span><span data-lang-cn>雙語工作坊</span>
+                        </div>
+                        <!-- Decorative Icon Overlay -->
+                        <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                            <i class="fa fa-microphone text-9xl text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-3xl font-extrabold mb-4 group-hover:text-accent transition-colors text-indigo-950">
+                        <span data-lang-en>The Art of Questioning Workshop</span>
+                        <span data-lang-cn>提問的藝術：雙語實戰工作坊</span>
+                    </h3>
+                    <div class="flex flex-wrap gap-5 text-purple-400 font-bold mb-8">
+                        <span class="flex items-center"><i class="fa fa-calendar-o mr-2"></i> 2026年5月25日</span>
+                        <span class="flex items-center"><i class="fa fa-map-marker mr-2"></i> 香港</span>
+                        <span class="flex items-center"><i class="fa fa-users mr-2"></i> 10歲以上</span>
+                    </div>
+                    <a href="https://yuanyuandripmind.github.io/Workshop-of-Questioning/" target="_blank" class="w-full py-4 rounded-2xl bg-purple-50 text-purple-600 font-black flex items-center justify-center gap-3 group-hover:bg-purple-600 group-hover:text-white transition-all shadow-sm">
+                        <span data-lang-en>Explore Details</span><span data-lang-cn>探索詳情</span>
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-      </section>
+    </section>
 
-      {/* Footer */}
-      <footer className="py-16 bg-white border-t border-slate-100 px-8 text-center">
-         <div className="max-w-7xl mx-auto">
-            <div className="flex items-center justify-center gap-3 mb-8">
-              <div className="w-8 h-8 bg-gradient-to-br from-sky-400 to-purple-600 rounded-lg flex items-center justify-center text-white font-black text-sm">DM</div>
-              <span className="text-xl font-black text-slate-900 tracking-tight">DripMind</span>
+    <!-- 聯繫我們 -->
+    <section id="contact" class="section-padding bg-dark text-white relative overflow-hidden">
+        <!-- 背景裝飾 -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-primary/20 blur-[150px] rounded-full"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-accent/20 blur-[150px] rounded-full"></div>
+
+        <div class="container mx-auto relative z-10">
+            <div class="grid lg:grid-cols-2 gap-24 items-center">
+                <div class="space-y-12">
+                    <h2 class="text-4xl md:text-7xl font-black leading-tight">
+                        <span data-lang-en>Start the Journey</span>
+                        <span data-lang-cn>開啟智行之旅</span><br>
+                        <span class="text-indigo-300" data-lang-en>With Us.</span>
+                        <span class="text-indigo-300" data-lang-cn>期待與您相遇。</span>
+                    </h2>
+                    <p class="text-indigo-200/60 text-xl leading-relaxed max-w-md font-medium">
+                        <span data-lang-en>Have questions about our programs or interested in corporate partnership? Reach out to our team today.</span>
+                        <span data-lang-cn>無論您是想了解課程詳情，還是尋求機構合作，歡迎隨時通過以下方式聯繫我們。</span>
+                    </p>
+                    <div class="space-y-8">
+                        <div class="flex items-center gap-8 group">
+                            <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center text-indigo-300 text-3xl group-hover:bg-indigo-500 transition-colors">
+                                <i class="fa fa-envelope"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-indigo-400 uppercase tracking-[0.2em] font-black mb-1">Email</p>
+                                <p class="text-2xl font-bold">yuanyuan.ji@dripmindhk.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[3rem] p-10 md:p-16 text-dark shadow-2xl border border-white/10">
+                    <form class="space-y-8" onsubmit="event.preventDefault(); this.innerHTML = '<div class=\'text-center py-20\'><i class=\'fa fa-check-circle text-7xl text-green-500 mb-6\'></i><h3 class=\'text-3xl font-black text-indigo-950\'>發送成功！</h3><p class=\'text-slate-500 font-bold mt-2\'>我們會盡快與您聯繫。</p></div>';">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="space-y-3">
+                                <label class="text-xs font-black uppercase text-indigo-300 tracking-widest ml-1">Name / 姓名</label>
+                                <input type="text" required class="w-full bg-slate-50 border-2 border-slate-50 p-5 rounded-2xl focus:border-indigo-500 outline-none transition-all font-bold">
+                            </div>
+                            <div class="space-y-3">
+                                <label class="text-xs font-black uppercase text-indigo-300 tracking-widest ml-1">Email / 郵箱</label>
+                                <input type="email" required class="w-full bg-slate-50 border-2 border-slate-50 p-5 rounded-2xl focus:border-indigo-500 outline-none transition-all font-bold">
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <label class="text-xs font-black uppercase text-indigo-300 tracking-widest ml-1">Message / 留言內容</label>
+                            <textarea rows="4" required class="w-full bg-slate-50 border-2 border-slate-50 p-5 rounded-2xl focus:border-indigo-500 outline-none transition-all font-bold"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-6 bg-indigo-600 text-white rounded-2xl font-black text-xl shadow-xl shadow-indigo-600/30 hover:bg-indigo-700 hover:-translate-y-1 transition-all">
+                            <span data-lang-en>Send Message</span><span data-lang-cn>立即提交</span>
+                        </button>
+                    </form>
+                </div>
             </div>
-            <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.4em]">
-              {t.footer}
-            </p>
-         </div>
-      </footer>
-    </div>
-  );
-};
+        </div>
+    </section>
 
-export default App;
+    <!-- 頁腳 -->
+    <footer class="bg-dark py-16 border-t border-white/5">
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-10">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 bg-white/10 rounded flex items-center justify-center text-white font-black">DM</div>
+                <div class="flex flex-col">
+                    <span class="text-white font-black tracking-widest">DRIPMIND</span>
+                    <span class="text-white/20 text-xs font-bold uppercase tracking-widest">水滴智行</span>
+                </div>
+            </div>
+            <p class="text-white/20 text-sm font-medium text-center">
+                &copy; 2025 DripMind Innovation Education. All Rights Reserved.
+            </p>
+            <div class="flex gap-8 text-white/40 text-2xl">
+                <a href="#" class="hover:text-indigo-400 transition-colors"><i class="fa fa-weixin"></i></a>
+                <a href="#" class="hover:text-indigo-400 transition-colors"><i class="fa fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 腳本邏輯 -->
+    <script>
+        const langToggle = document.getElementById('langToggle');
+        const mobileLangToggle = document.getElementById('mobileLangToggle');
+        const body = document.body;
+
+        function toggleLanguage() {
+            if (body.classList.contains('lang-cn')) {
+                body.classList.remove('lang-cn');
+                body.classList.add('lang-en');
+            } else {
+                body.classList.remove('lang-en');
+                body.classList.add('lang-cn');
+            }
+        }
+
+        langToggle.addEventListener('click', toggleLanguage);
+        mobileLangToggle.addEventListener('click', () => {
+            toggleLanguage();
+            document.getElementById('mobileMenu').classList.add('hidden');
+        });
+
+        const menuBtn = document.getElementById('mobileMenuBtn');
+        const menu = document.getElementById('mobileMenu');
+        
+        menuBtn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => menu.classList.add('hidden'));
+        });
+    </script>
+</body>
+</html>
